@@ -1,0 +1,8 @@
+<meta>
+    <info author="Lucas" description="--" type="script" version="1.0" />
+    <script src="ex_C.lua" type="client" />
+    <file src="headlight.png" />
+    <file src="headlight1.png" />
+    <file src="coronastar.png" />
+    <file src="texreplace.fx" />
+</meta>
