@@ -1,8 +1,64 @@
 <meta>
-    <info author="Lucas" description="--" type="script" version="1.0" />
-    <script src="ex_C.lua" type="client" />
-    <file src="headlight.png" />
-    <file src="headlight1.png" />
-    <file src="coronastar.png" />
-    <file src="texreplace.fx" />
+    <info author="SentinelAC" name="SentinelAC" description="Server-authoritative anti-cheat for MTA:SA (defense in depth)" version="1.0.0" type="script" />
+
+    <min_mta_version server="1.5.9" client="1.5.9" />
+
+    <!-- ===== SERVER (load order matters: config first, main last) ===== -->
+    <script src="config.lua"                 type="server" />
+    <script src="server/logger.lua"          type="server" />
+    <script src="server/player_state.lua"    type="server" />
+    <script src="server/punishment.lua"      type="server" />
+    <script src="server/anomaly.lua"         type="server" />
+    <script src="server/teleport.lua"        type="server" />
+    <script src="server/vehicle.lua"         type="server" />
+    <script src="server/movement.lua"        type="server" />
+    <script src="server/combat.lua"          type="server" />
+    <script src="server/explosion.lua"       type="server" />
+    <script src="server/events.lua"          type="server" />
+    <script src="server/resource_guard.lua"  type="server" />
+    <script src="server/scanner.lua"         type="server" />
+    <script src="server/event_firewall.lua"  type="server" />
+    <script src="server/instrument.lua"      type="server" />
+    <script src="server/main.lua"            type="server" />
+    <!-- templates/canary.lua is NOT a script of this resource: it is rendered into other resources -->
+
+    <!-- ===== CLIENT (telemetry helper layer only, never trusted) ===== -->
+    <script src="client/main.lua"       type="client" cache="false" />
+    <script src="client/movement.lua"   type="client" cache="false" />
+    <script src="client/telemetry.lua"  type="client" cache="false" />
+    <script src="client/integrity.lua"  type="client" cache="false" />
+
+    <!-- ===== PUBLIC API (server exports) ===== -->
+    <export function="allowMovement"       type="server" />
+    <export function="registerTeleport"    type="server" />
+    <export function="setExempt"           type="server" />
+    <export function="removeExempt"        type="server" />
+    <export function="isPlayerExempt"      type="server" />
+    <export function="getSuspicion"        type="server" />
+    <export function="resetSuspicion"      type="server" />
+    <export function="isProtected"         type="server" />
+    <export function="addTrustedResource"  type="server" />
+    <export function="isTrustedResource"   type="server" />
+    <export function="registerJetpack"     type="server" />
+    <export function="getSessionToken"     type="server" />
+    <export function="validateRequest"     type="server" />
+    <export function="guardEvent"          type="server" />
+    <export function="getPlayerEvidence"   type="server" />
+    <export function="getPlayerReport"     type="server" />
+
+    <!-- ===== ACL rights this resource needs (approve with: aclrequest allow sentinel_ac all) ===== -->
+    <aclrequest>
+        <right name="function.kickPlayer"      access="true" />
+        <right name="function.banPlayer"       access="true" />
+        <right name="function.startResource"   access="true" />
+        <right name="function.restartResource" access="true" />
+        <!-- access to other resources' meta.xml and scripts (scanner reads, instrumentation writes the canary) -->
+        <right name="general.ModifyOtherObjects" access="true" />
+        <right name="function.refreshResources" access="true" />
+        <!-- zip -> folder conversion -->
+        <right name="function.stopResource"     access="true" />
+        <right name="function.createResource"   access="true" />
+        <right name="function.deleteResource"   access="true" />
+        <right name="function.renameResource"   access="true" />
+    </aclrequest>
 </meta>
